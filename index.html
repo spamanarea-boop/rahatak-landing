@@ -323,8 +323,10 @@
 
   document.addEventListener('click', function(e){
     var link = e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
-    if(link && window.dataLayer){
-      window.dataLayer.push({event: 'phone_call_click', link_location: link.closest('section, .callbar, footer')?.className || 'unknown'});
+    if(link && typeof gtag === 'function'){
+      gtag('event', 'phone_call_click', {
+        link_location: (link.closest('.callbar') ? 'top_bar' : link.closest('.hero') ? 'hero' : link.closest('.location-card') ? 'contact_section' : 'other')
+      });
     }
   });
 </script>

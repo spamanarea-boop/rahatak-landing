@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>مركز راحتك | مساج رجالي في جدة</title>
-<meta name="description" content="مركز راحتك - مساج رجالي احترافي بخصوصية تامة في حي الصفا، جدة. جلسة مساج 45 دقيقة بسعر 140 ريال، وحمام مغربي منفصل بسعر 150 ريال.">
+<meta name="description" content="مركز راحتك - مساج رجالي احترافي بخصوصية تامة في حي الصفا، جدة. مساج 45 دقيقة بـ140 ريال، حمام مغربي بـ150 ريال، والعرض الذهبي مساج + حمام مغربي بـ265 ريال.">
 <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-PPXKGH87"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -112,6 +112,13 @@
   .medallion .num{font-family:var(--font-body); font-variant-numeric:tabular-nums; font-weight:900; font-size:1.6rem; color:var(--gold)}
   .medallion .unit{color:var(--muted); font-size:.82rem; display:block}
 
+  .hero-offer{
+    display:inline-block; margin-top:16px; padding:10px 16px; border-radius:12px; text-decoration:none;
+    color:var(--fg); font-size:.9rem; border:1px dashed var(--gold);
+    background:color-mix(in srgb, var(--gold) 12%, transparent); animation:rise .7s .2s ease both;
+  }
+  .hero-offer b{color:var(--gold)}
+  html{scroll-behavior:smooth}
   .cta-row{display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; animation:rise .7s .22s ease both}
   .btn{display:inline-flex; align-items:center; gap:8px; padding:14px 24px; border-radius:12px; font-weight:700; text-decoration:none; font-size:.95rem; border:1px solid transparent}
   .btn.primary{background:linear-gradient(135deg, var(--gold), var(--gold-soft)); color:#1a1309; box-shadow:0 10px 26px -10px color-mix(in srgb, var(--gold) 65%, transparent)}
@@ -184,12 +191,44 @@
   .sticky-cta a{flex:1; justify-content:center; text-align:center}
   body{padding-bottom:78px}
 
-  /* ملصق العرض الحالي */
-  .promo{display:flex; flex-direction:column; align-items:center; text-align:center; gap:18px}
-  .promo img{
-    max-width:320px; width:100%; border-radius:20px; border:1px solid var(--border);
-    box-shadow:0 20px 50px -20px rgba(0,0,0,.55);
+  /* العروض */
+  .promo h2{margin-bottom:22px}
+  #offers{scroll-margin-top:80px}
+  .offers{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  @media (max-width:480px){.offers{grid-template-columns:1fr}}
+  .offer{
+    position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px;
+    padding:26px 18px 20px; border-radius:20px; min-width:0;
+    background:var(--surface); border:1px solid var(--border);
   }
+  .offer.silver{border-color:color-mix(in srgb, #c9ccd1 45%, var(--border))}
+  .offer.gold-offer{
+    border:1.5px solid var(--gold);
+    background:radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--gold) 22%, var(--surface)), var(--surface) 70%);
+    box-shadow:0 18px 40px -20px color-mix(in srgb, var(--gold) 70%, transparent);
+  }
+  .offer-flag{
+    position:absolute; top:-12px; background:var(--gold); color:#1a1309; font-weight:900; font-size:.75rem;
+    padding:4px 12px; border-radius:999px;
+  }
+  .offer-tag{font-family:var(--font-display); font-size:1.35rem; color:var(--fg)}
+  .offer.silver .offer-tag{color:#c9ccd1}
+  .offer.gold-offer .offer-tag{color:var(--gold)}
+  .offer-what{color:var(--muted); font-size:.92rem}
+  .offer-price{display:flex; align-items:baseline; gap:6px; font-variant-numeric:tabular-nums}
+  .offer-price b{font-size:2.6rem; font-weight:900; line-height:1}
+  .offer.silver .offer-price b{color:#d9dce0}
+  .offer.gold-offer .offer-price b{color:var(--gold)}
+  .offer-price span{color:var(--muted)}
+  .offer-save{font-size:.8rem; color:var(--gold); font-weight:700}
+  .offer .btn{width:100%; justify-content:center; margin-top:4px}
+  .posters{
+    display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; margin-top:26px; padding-bottom:8px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .posters a{flex:0 0 72%; max-width:280px; scroll-snap-align:center}
+  .posters img{width:100%; display:block; border-radius:16px; border:1px solid var(--border); box-shadow:0 14px 34px -18px rgba(0,0,0,.6)}
+  .posters-hint{color:var(--muted); font-size:.8rem; text-align:center; margin-top:6px}
 </style>
 </head>
 <body>
@@ -238,6 +277,8 @@
         </div>
       </div>
 
+      <a class="hero-offer" href="#offers">🔥 العرض الذهبي: مساج + حمام مغربي بـ<b>265 ريال</b> بدل 290 ←</a>
+
       <div class="cta-row">
         <a class="btn primary" href="tel:0122682692">احجز بمكالمة الآن</a>
         <a class="btn ghost" href="https://maps.app.goo.gl/YBe5SqUoDdFgDKig9?g_st=ic" target="_blank" rel="noopener">الموقع على الخريطة</a>
@@ -247,10 +288,33 @@
 
   <svg class="ornament wrap" viewBox="0 0 760 22" preserveAspectRatio="none"><rect width="760" height="22" fill="url(#zellige)"/></svg>
 
-  <section class="section promo">
-    <span class="label">عروضنا الحالية</span>
-    <img src="images/offer-poster.jpg" alt="عروض مركز راحتك: جلسة مساج 45 دقيقة بـ140 ريال، والحمام المغربي كخدمة منفصلة بـ150 ريال" loading="lazy">
-    <a class="btn primary" href="tel:0122682692">احجز عرضك الآن</a>
+  <section class="section promo" id="offers">
+    <span class="label">عروضنا</span>
+    <h2>45 دقيقة.. عالم آخر من الراحة</h2>
+    <div class="offers">
+      <div class="offer silver">
+        <span class="offer-tag">العرض الفضي</span>
+        <p class="offer-what">45 دقيقة مساج<br>استرخائي أو سويدي أو تايلاندي</p>
+        <div class="offer-price"><b>140</b><span>ريال</span></div>
+        <a class="btn ghost" href="tel:0122682692">احجز العرض الفضي</a>
+      </div>
+      <div class="offer gold-offer">
+        <span class="offer-flag">الأكثر طلبًا</span>
+        <span class="offer-tag">العرض الذهبي</span>
+        <p class="offer-what">45 دقيقة مساج<br>+ حمام مغربي</p>
+        <div class="offer-price"><b>265</b><span>ريال</span></div>
+        <span class="offer-save">بدل 290 ريال · وفّر 25 ريال</span>
+        <a class="btn primary" href="tel:0122682692">احجز العرض الذهبي</a>
+      </div>
+    </div>
+    <div class="posters" aria-label="ملصقات العروض">
+      <a href="tel:0122682692"><img src="images/offer-1.jpg" alt="عرض مركز راحتك: 45 دقيقة خارج الزمن، العرض الفضي 140 ريال والعرض الذهبي 265 ريال" loading="lazy"></a>
+      <a href="tel:0122682692"><img src="images/offer-2.jpg" alt="عروض مركز راحتك للمساج الرجالي والحمام المغربي" loading="lazy"></a>
+      <a href="tel:0122682692"><img src="images/offer-3.jpg" alt="عرض فضي 140 ريال وعرض ذهبي 265 ريال في مركز راحتك" loading="lazy"></a>
+      <a href="tel:0122682692"><img src="images/offer-4.jpg" alt="مركز راحتك: مساج بأيدي رجال فلبينيين" loading="lazy"></a>
+      <a href="tel:0122682692"><img src="images/offer-5.jpg" alt="عروض مركز راحتك في حي الصفا بجدة" loading="lazy"></a>
+    </div>
+    <p class="posters-hint">اسحب لمشاهدة كل العروض ←</p>
   </section>
 
   <svg class="ornament wrap" viewBox="0 0 760 22" preserveAspectRatio="none"><rect width="760" height="22" fill="url(#zellige)"/></svg>
@@ -333,7 +397,7 @@
 </footer>
 
 <div class="sticky-cta">
-  <a class="btn ghost" href="https://maps.app.goo.gl/YBe5SqUoDdFgDKig9?g_st=ic" target="_blank" rel="noopener">الموقع</a>
+  <a class="btn ghost" href="#offers">العروض</a>
   <a class="btn primary" href="tel:0122682692">📞 احجز الآن</a>
 </div>
 

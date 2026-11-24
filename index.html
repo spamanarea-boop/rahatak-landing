@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>مركز راحتك | مساج رجالي في جدة</title>
-<meta name="description" content="مركز راحتك - مساج رجالي احترافي بخصوصية تامة في حي الصفا، جدة. جلسة مساج 45 دقيقة بسعر 149 ريال، وحمام مغربي منفصل.">
+<meta name="description" content="مركز راحتك - مساج رجالي احترافي بخصوصية تامة في حي الصفا، جدة. جلسة مساج 45 دقيقة بسعر 140 ريال، أو مع حمام مغربي بسعر 265 ريال.">
 <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-PPXKGH87"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -132,7 +132,16 @@
   .card.teal{--accent-color:var(--teal)}
   .card .card-img{width:100%; aspect-ratio:4/3; object-fit:cover; display:block}
   .card .card-body{padding:20px 20px 20px 24px; display:flex; flex-direction:column; gap:10px; min-width:0}
-  .card .icon{width:36px; height:36px; flex:none; color:var(--accent-color)}
+  .icon-badge{
+    display:flex; align-items:center; justify-content:center; flex:none;
+    width:52px; height:52px; border-radius:50%;
+    background:radial-gradient(circle at 30% 28%, color-mix(in srgb, var(--accent-color) 28%, var(--surface)), var(--surface));
+    border:1px solid color-mix(in srgb, var(--accent-color) 45%, var(--border));
+    box-shadow:0 4px 14px -6px color-mix(in srgb, var(--accent-color) 55%, transparent);
+  }
+  .icon-badge.gold{--accent-color:var(--gold)}
+  .icon-badge.teal{--accent-color:var(--teal)}
+  .card .icon{width:26px; height:26px; flex:none; color:var(--accent-color)}
   .card h3{font-size:1.25rem}
   .card p{color:var(--muted); font-size:.92rem}
   .card .meta{display:flex; align-items:baseline; gap:6px; margin-top:auto; padding-top:10px; font-variant-numeric:tabular-nums}
@@ -143,7 +152,8 @@
   .trust{display:grid; grid-template-columns:1fr 1fr; gap:18px}
   @media (max-width:480px){.trust{grid-template-columns:1fr}}
   .trust-item{display:flex; gap:13px; align-items:flex-start; min-width:0}
-  .trust-item .octagon{width:38px; height:38px; flex:none; color:var(--gold)}
+  .trust-item .icon-badge{width:46px; height:46px}
+  .trust-item .octagon{width:24px; height:24px; flex:none; color:var(--gold)}
   .trust-item h4{font-family:var(--font-body); font-weight:700; font-size:.98rem; margin-bottom:4px}
   .trust-item p{color:var(--muted); font-size:.88rem}
 
@@ -164,6 +174,13 @@
 
   footer{padding-block:28px 42px; text-align:center}
   footer p{color:var(--muted); font-size:.82rem}
+
+  /* ملصق العرض الحالي */
+  .promo{display:flex; flex-direction:column; align-items:center; text-align:center; gap:18px}
+  .promo img{
+    max-width:320px; width:100%; border-radius:20px; border:1px solid var(--border);
+    box-shadow:0 20px 50px -20px rgba(0,0,0,.55);
+  }
 </style>
 </head>
 <body>
@@ -207,7 +224,7 @@
           <circle cx="24" cy="24" r="15" fill="none" stroke="var(--gold)" stroke-width="1"/>
         </svg>
         <div>
-          <span class="num">149 <span class="unit" style="display:inline">ريال</span></span>
+          <span class="num">140 <span class="unit" style="display:inline">ريال</span></span>
           <span class="unit">جلسة مساج · 45 دقيقة</span>
         </div>
       </div>
@@ -221,26 +238,34 @@
 
   <svg class="ornament wrap" viewBox="0 0 760 22" preserveAspectRatio="none"><rect width="760" height="22" fill="url(#zellige)"/></svg>
 
+  <section class="section promo">
+    <span class="label">عرض اليوم</span>
+    <img src="images/offer-poster.jpg" alt="عرض مركز راحتك: 140 ريال للمساج، 265 ريال مع الحمام المغربي" loading="lazy">
+    <a class="btn primary" href="tel:0122682692">احجز هذا العرض الآن</a>
+  </section>
+
+  <svg class="ornament wrap" viewBox="0 0 760 22" preserveAspectRatio="none"><rect width="760" height="22" fill="url(#zellige)"/></svg>
+
   <section class="section">
-    <span class="label">خدماتنا</span>
-    <h2>جلستان، راحة واحدة</h2>
+    <span class="label">عروضنا</span>
+    <h2>عرضان، راحة واحدة</h2>
     <div class="cards">
       <div class="card gold">
-        <img class="card-img" src="images/spa-stilllife.png" alt="أدوات جلسة المساج: مناشف، زيت، وأحجار دافئة" loading="lazy">
+        <img class="card-img" src="images/spa-scene-1.jpg" alt="جلسة مساج رجالي احترافية في مركز راحتك" loading="lazy">
         <div class="card-body">
-          <svg class="icon" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M24 6c6 6 10 12 10 19a10 10 0 0 1-20 0c0-7 4-13 10-19z"/></svg>
-          <h3>جلسة مساج</h3>
-          <p>مساج كامل الجسم لتخفيف التوتر والإجهاد، بأيدٍ محترفة ومدربة.</p>
-          <div class="meta"><b>149 ريال</b><span>· 45 دقيقة</span></div>
+          <span class="icon-badge gold"><svg class="icon" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M24 6c6 6 10 12 10 19a10 10 0 0 1-20 0c0-7 4-13 10-19z"/></svg></span>
+          <h3>العرض الفضي</h3>
+          <p>45 دقيقة مساج استرخائي أو سويدي أو تايلاندي، بأيدٍ محترفة ومدربة.</p>
+          <div class="meta"><b>140 ريال</b><span>· 45 دقيقة مساج</span></div>
         </div>
       </div>
       <div class="card teal">
-        <img class="card-img" src="images/hammam-room.png" alt="أجواء الحمام المغربي بأرضية الزليج والبخار الدافئ" loading="lazy">
+        <img class="card-img" src="images/spa-scene-2.jpg" alt="مساج رجالي مع حمام مغربي في أجواء دافئة" loading="lazy">
         <div class="card-body">
-          <svg class="icon" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M9 30c3-10 8-18 15-22 7 4 12 12 15 22-4 6-10 10-15 10s-11-4-15-10z"/><path fill="none" stroke="currentColor" stroke-width="1.6" d="M24 14v20"/></svg>
-          <h3>الحمام المغربي</h3>
-          <p>خدمة تنظيف وتقشير تقليدية منفصلة عن المساج، لتجديد الجسم بالكامل.</p>
-          <div class="meta"><b>150 ريال</b><span>· خدمة منفصلة</span></div>
+          <span class="icon-badge teal"><svg class="icon" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M9 30c3-10 8-18 15-22 7 4 12 12 15 22-4 6-10 10-15 10s-11-4-15-10z"/><path fill="none" stroke="currentColor" stroke-width="1.6" d="M24 14v20"/></svg></span>
+          <h3>العرض الذهبي</h3>
+          <p>45 دقيقة مساج مع حمام مغربي كامل، لتجديد الجسم بالكامل في جلسة واحدة.</p>
+          <div class="meta"><b>265 ريال</b><span>· مساج + حمام مغربي</span></div>
         </div>
       </div>
     </div>
@@ -253,19 +278,19 @@
     <h2>تجربة مصمّمة لراحتك</h2>
     <div class="trust">
       <div class="trust-item">
-        <svg class="octagon" viewBox="0 0 48 48"><use href="#octIcon"/><path fill="currentColor" d="M18 24l4 4 8-8" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="icon-badge gold"><svg class="octagon" viewBox="0 0 48 48"><use href="#octIcon"/><path fill="currentColor" d="M18 24l4 4 8-8" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <div><h4>طاقم فلبيني محترف</h4><p>معالجون مدرّبون على تقنيات المساج العلاجي.</p></div>
       </div>
       <div class="trust-item">
-        <svg class="octagon" viewBox="0 0 48 48"><use href="#octIcon"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M24 15a6 6 0 0 1 6 6v3h2v8H16v-8h2v-3a6 6 0 0 1 6-6z"/></svg>
+        <span class="icon-badge gold"><svg class="octagon" viewBox="0 0 48 48"><use href="#octIcon"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M24 15a6 6 0 0 1 6 6v3h2v8H16v-8h2v-3a6 6 0 0 1 6-6z"/></svg></span>
         <div><h4>خصوصية تامة</h4><p>بيئة مخصصة للرجال فقط، بعيدًا عن أي إزعاج.</p></div>
       </div>
       <div class="trust-item">
-        <svg class="octagon" viewBox="0 0 48 48"><use href="#octIcon"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M16 13l16 16M32 13L16 29" stroke-linecap="round"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M15 17c1.5 4 10 13 14 14" stroke-linecap="round"/></svg>
+        <span class="icon-badge gold"><svg class="octagon" viewBox="0 0 48 48"><use href="#octIcon"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M16 13l16 16M32 13L16 29" stroke-linecap="round"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M15 17c1.5 4 10 13 14 14" stroke-linecap="round"/></svg></span>
         <div><h4>حجز سريع</h4><p>مكالمة واحدة كافية لتثبيت موعدك.</p></div>
       </div>
       <div class="trust-item">
-        <svg class="octagon" viewBox="0 0 48 48"><use href="#octIcon"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M24 14a6 6 0 0 1 6 6c0 5-6 12-6 12s-6-7-6-12a6 6 0 0 1 6-6z"/><circle cx="24" cy="20" r="2" fill="currentColor"/></svg>
+        <span class="icon-badge gold"><svg class="octagon" viewBox="0 0 48 48"><use href="#octIcon"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M24 14a6 6 0 0 1 6 6c0 5-6 12-6 12s-6-7-6-12a6 6 0 0 1 6-6z"/><circle cx="24" cy="20" r="2" fill="currentColor"/></svg></span>
         <div><h4>موقع مميز</h4><p>في حي الصفا بجدة، سهل الوصول إليه.</p></div>
       </div>
     </div>

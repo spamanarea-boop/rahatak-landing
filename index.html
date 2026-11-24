@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>مركز راحتك | مساج رجالي في جدة</title>
 <meta name="description" content="مركز راحتك - مساج رجالي احترافي بخصوصية تامة في حي الصفا، جدة. جلسة مساج 45 دقيقة بسعر 149 ريال، وحمام مغربي منفصل.">
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-KRQCC567"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -161,6 +167,7 @@
 </style>
 </head>
 <body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KRQCC567" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <svg width="0" height="0" style="position:absolute">
   <defs>
@@ -313,6 +320,13 @@
       });
     }catch(e){}
   }
+
+  document.addEventListener('click', function(e){
+    var link = e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if(link && window.dataLayer){
+      window.dataLayer.push({event: 'phone_call_click', link_location: link.closest('section, .callbar, footer')?.className || 'unknown'});
+    }
+  });
 </script>
 </body>
 </html>

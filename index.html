@@ -281,7 +281,8 @@
       <a class="hero-offer" href="#offers">🔥 العرض الذهبي: مساج + حمام مغربي بـ<b>265 ريال</b> بدل 290 ←</a>
 
       <div class="cta-row">
-        <a class="btn primary" href="tel:0122682692">احجز بمكالمة الآن</a>
+        <a class="btn primary" href="booking.html?service=silver">احجز موعدك أونلاين</a>
+        <a class="btn ghost" href="tel:0122682692">أو اتصل الآن</a>
         <a class="btn ghost" href="https://maps.app.goo.gl/YBe5SqUoDdFgDKig9?g_st=ic" target="_blank" rel="noopener">الموقع على الخريطة</a>
       </div>
     </div>
@@ -297,7 +298,7 @@
         <span class="offer-tag">العرض الفضي</span>
         <p class="offer-what">45 دقيقة مساج<br>استرخائي أو سويدي أو تايلاندي</p>
         <div class="offer-price"><b>140</b><span>ريال</span></div>
-        <a class="btn ghost" href="tel:0122682692">احجز العرض الفضي</a>
+        <a class="btn ghost" href="booking.html?service=silver">احجز العرض الفضي</a>
       </div>
       <div class="offer gold-offer">
         <span class="offer-flag">الأكثر طلبًا</span>
@@ -305,7 +306,7 @@
         <p class="offer-what">45 دقيقة مساج<br>+ حمام مغربي</p>
         <div class="offer-price"><b>265</b><span>ريال</span></div>
         <span class="offer-save">بدل 290 ريال · وفّر 25 ريال</span>
-        <a class="btn primary" href="tel:0122682692">احجز العرض الذهبي</a>
+        <a class="btn primary" href="booking.html?service=gold">احجز العرض الذهبي</a>
       </div>
     </div>
     <div class="posters" aria-label="ملصقات العروض">
@@ -384,7 +385,8 @@
         <button class="copy-btn" onclick="copyPhone(this)">نسخ الرقم</button>
       </div>
       <div class="foot-actions">
-        <a class="btn primary" href="tel:0122682692">اتصل الآن</a>
+        <a class="btn primary" href="booking.html">طلب حجز إلكتروني</a>
+        <a class="btn ghost" href="tel:0122682692">اتصل الآن</a>
         <a class="btn wa" href="https://wa.me/966122682692?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%AD%D8%AC%D8%B2%20%D9%85%D9%88%D8%B9%D8%AF%20%D9%81%D9%8A%20%D9%85%D8%B1%D9%83%D8%B2%20%D8%B1%D8%A7%D8%AD%D8%AA%D9%83" target="_blank" rel="noopener">احجز عبر واتساب</a>
         <a class="btn ghost" href="https://maps.app.goo.gl/YBe5SqUoDdFgDKig9?g_st=ic" target="_blank" rel="noopener">فتح في خرائط Google</a>
       </div>
@@ -424,14 +426,30 @@
     }catch(e){}
   }
 
+  // حافظ على وسوم مصدر الزيارة عند الانتقال إلى صفحة الحجز؛ لا ترسل بيانات العملاء.
+  (function preserveCampaignParams(){
+    var incoming = new URLSearchParams(location.search);
+    var keys = ['gclid','gbraid','wbraid','utm_source','utm_medium','utm_campaign','utm_content','utm_term','m'];
+    document.querySelectorAll('a[href^="booking.html"]').forEach(function(a){
+      var dest = new URL(a.getAttribute('href'), location.href);
+      keys.forEach(function(key){
+        if(incoming.has(key) && !dest.searchParams.has(key)) dest.searchParams.set(key, incoming.get(key));
+      });
+      a.href = dest.pathname + dest.search + dest.hash;
+    });
+  })();
+
   document.addEventListener('click', function(e){
     var link = e.target.closest ? e.target.closest('a[href^="tel:"], a[href^="https://wa.me/"]') : null;
     if(link && typeof gtag === 'function'){
       var isWa = link.getAttribute('href').indexOf('https://wa.me/') === 0;
       var where = (link.closest('.callbar') ? 'top_bar' : link.closest('.hero') ? 'hero' : link.closest('.location-card') ? 'contact_section' : link.closest('.sticky-cta') ? 'sticky_bar' : link.closest('.promo') ? 'offers_section' : 'other');
-      // نفس الحدث المربوط بتحويل Google Ads «اتصال من الموقع» عبر GTM
-      gtag('event', 'phone_call_click', { link_location: where, contact_method: isWa ? 'whatsapp' : 'phone' });
-      if(isWa){ gtag('event', 'whatsapp_click', { link_location: where }); }
+      // لا نخلط نقرة واتساب بنقرة اتصال هاتفي؛ كلاهما تفاعل وليس حجزًا مؤكدًا.
+      if(isWa){
+        gtag('event', 'whatsapp_click', { link_location: where });
+      } else {
+        gtag('event', 'phone_call_click', { link_location: where, contact_method: 'phone' });
+      }
     }
   });
 </script>

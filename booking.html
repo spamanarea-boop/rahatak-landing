@@ -22,7 +22,6 @@
     --bg:#110d0a; --surface:#1b1511; --surface-2:#241c15;
     --fg:#f8efe1; --muted:#b3a38b; --gold:#d8aa5c; --gold-soft:#8c6c38;
     --teal:#3d8077; --danger:#e0775a; --border:rgba(248,239,225,.14);
-    --wa:#1f9d55;
     color-scheme:dark;
     --font-display:'Aref Ruqaa','Traditional Arabic',serif;
     --font-body:'Tajawal','Segoe UI',sans-serif;
@@ -58,7 +57,6 @@
        font:700 .95rem var(--font-body); text-decoration:none; border:1px solid transparent; cursor:pointer}
   .btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
   .btn.primary{background:linear-gradient(135deg, var(--gold), var(--gold-soft)); color:#1a1309}
-  .btn.wa{background:var(--wa); color:#fff}
   .btn.ghost{border-color:var(--border); color:var(--fg); background:transparent}
   .btn.sm{padding:9px 14px; font-size:.85rem; border-radius:999px}
 
@@ -130,7 +128,7 @@
     <span class="eyebrow">حجز موعد · للرجال فقط</span>
     <h1 id="heroTitle">احجز جلستك في أقل من دقيقة</h1>
     <p id="heroLead" hidden></p>
-    <p>اختر الخدمة والوقت المناسب، وسنحفظ طلبك في نظام المركز. يمكنك استخدام واتساب لتسريع التواصل، ويُؤكَّد الموعد بعد رد الاستقبال.</p>
+    <p>اختر الخدمة والوقت المناسب، وسنحفظ طلبك في نظام المركز. يتصل بك الاستقبال هاتفيًا لتأكيد الموعد؛ فالطلب لا يُعد حجزًا مؤكدًا قبل الاتصال.</p>
   </header>
 
   <section aria-labelledby="h-services">
@@ -192,16 +190,15 @@
       </label>
       <span class="err" data-for="consent"></span>
       <p class="note">يُحفظ طلبك لدى المركز فور الإرسال، ويتواصل معك الاستقبال لتأكيد الموعد. <b>الحجز لا يُعد مؤكدًا قبل رد الاستقبال.</b></p>
-      <button class="btn wa" type="submit" id="submitBtn">إرسال طلب الحجز</button>
+      <button class="btn primary" type="submit" id="submitBtn">إرسال طلب الحجز</button>
     </form>
 
     <div class="done" id="done" role="status" aria-live="polite">
       <h2 id="doneTitle">تم استلام طلبك</h2>
       <p>رقم الطلب: <span class="ref" id="refOut"></span></p>
-      <p id="doneText">طلبك محفوظ لدى المركز، وسيتواصل معك الاستقبال لتأكيد الموعد. لتسريع التأكيد يمكنك إرسال الطلب عبر واتساب أيضًا.</p>
+      <p id="doneText">طلبك محفوظ لدى المركز، وسيتواصل معك الاستقبال بالهاتف لتأكيد الموعد. ويمكنك الاتصال للاستفسار باستخدام رقم الطلب.</p>
       <div class="actions">
-        <a class="btn wa" id="waAgain" href="#" target="_blank" rel="noopener" data-track="whatsapp" data-where="confirmation">إرسال الطلب عبر واتساب</a>
-        <a class="btn ghost" href="tel:0122682692" data-track="call" data-where="confirmation">أو اتصل بنا</a>
+        <a class="btn primary" href="tel:0122682692" data-track="call" data-where="confirmation">اتصل لتأكيد الطلب</a>
       </div>
     </div>
   </section>
@@ -219,7 +216,6 @@
       <span class="num">012 268 2692</span>
       <div class="actions">
         <a class="btn primary" href="tel:0122682692" data-track="call" data-where="contact">اتصل الآن</a>
-        <a class="btn wa" href="#" data-wa-generic data-track="whatsapp" data-where="contact" target="_blank" rel="noopener">واتساب</a>
         <a class="btn ghost" href="https://maps.app.goo.gl/YBe5SqUoDdFgDKig9?g_st=ic" target="_blank" rel="noopener" data-track="directions" data-where="contact">الاتجاهات في خرائط Google</a>
       </div>
     </div>
@@ -235,8 +231,7 @@
 
 <script>
 (function(){
-  var WA = '966122682692';
-  // عنوان دالة حفظ الحجوزات (Supabase Edge Function). فارغ = الحفظ غير مفعّل بعد، فيُعرض واتساب كبديل.
+  // عنوان دالة حفظ الحجوزات (Supabase Edge Function). عند تعذر الحفظ نعتمد على الاتصال الهاتفي.
   var BOOKING_ENDPOINT = (document.querySelector('meta[name="booking-endpoint"]') || {}).content || '';
   if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)){
     var ep = new URLSearchParams(location.search).get('endpoint'); if(ep) BOOKING_ENDPOINT = ep; // للاختبار المحلي فقط
@@ -271,13 +266,7 @@
     dataLayer.push(Object.assign({event:name}, params));
   }
 
-  // ---- روابط واتساب العامة
-  var genericMsg = 'مرحبًا، أريد حجز موعد في مركز راحتك' + (src==='google_ads' ? ' (من إعلان جوجل)' : '');
-  document.querySelectorAll('[data-wa-generic]').forEach(function(a){
-    a.href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(genericMsg);
-  });
-
-  // ---- تتبع النقرات: اتصال / واتساب / اتجاهات
+  // ---- تتبع النقرات: هاتف أو اتجاهات فقط. نقرة الاتصال ليست مكالمة تم الرد عليها.
   document.addEventListener('click', function(e){
     var a = e.target.closest && e.target.closest('[data-track]');
     if(!a) return;
@@ -286,8 +275,6 @@
       track('call_click', {link_location:where});
       // يبقي التحويل الحالي «اتصال من الموقع» يعمل كما هو
       track('phone_call_click', {link_location:where, contact_method:'phone'});
-    } else if(kind === 'whatsapp'){
-      track('whatsapp_click', {link_location:where});
     } else if(kind === 'directions'){
       track('directions_click', {link_location:where});
     }
@@ -390,15 +377,6 @@
     var s = SERVICES[f.service];
     // رقم طلب العميل: يبقى نفسه عند إعادة المحاولة، فلا يُنشأ طلب مكرر
     var ref = pendingRef || (pendingRef = newRef());
-    var when = f.time === 'asap' ? 'أقرب وقت متاح اليوم' : f.date + ' الساعة ' + label12(+f.time.slice(0,2), +f.time.slice(3));
-
-    // رسالة واتساب بلا اسم ولا رقم جوال ولا ملاحظات: الرابط قد يُسجَّل كنقرة خارجية في GA4
-    function waUrl(r){
-      var msg = 'طلب حجز — مركز راحتك\n' + 'رقم الطلب: ' + r + '\n' +
-                'الخدمة: ' + s.label + ' (' + s.price + ' ريال)\n' + 'الموعد المطلوب: ' + when;
-      return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
-    }
-
     submitting = true;
     track('booking_submit', {service:f.service});
     var btn = document.getElementById('submitBtn'); btn.disabled = true; btn.textContent = 'جارٍ الإرسال…';
@@ -406,12 +384,11 @@
     function finish(saved, serverRef){
       var finalRef = serverRef || ref;
       document.getElementById('refOut').textContent = finalRef;
-      document.getElementById('waAgain').href = waUrl(finalRef);
       if(saved){ fireSavedOnce(finalRef, f, s); }
       else {
         track('booking_save_failed', {service:f.service});
         document.getElementById('doneTitle').textContent = 'لم يُحفظ طلبك بعد';
-        document.getElementById('doneText').textContent = 'تعذّر حفظ الطلب تلقائيًا. اضغط الزر أدناه لإرسال الطلب عبر واتساب واذكر اسمك، أو اتصل بنا مباشرة.';
+        document.getElementById('doneText').textContent = 'تعذّر حفظ الطلب تلقائيًا. اتصل بالمركز مباشرة لإتمام الحجز؛ فهذا الطلب لم يصل إلى الاستقبال.';
       }
       form.style.display = 'none';
       document.getElementById('done').classList.add('show');

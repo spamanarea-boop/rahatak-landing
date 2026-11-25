@@ -130,7 +130,7 @@
     <span class="eyebrow">حجز موعد · للرجال فقط</span>
     <h1 id="heroTitle">احجز جلستك في أقل من دقيقة</h1>
     <p id="heroLead" hidden></p>
-    <p>اختر الخدمة والوقت المناسب، وسيصل طلبك إلى استقبال المركز عبر واتساب. <b>يتأكد الحجز بعد رد الاستقبال.</b></p>
+    <p>اختر الخدمة والوقت المناسب، وسنحفظ طلبك في نظام المركز. يمكنك استخدام واتساب لتسريع التواصل، ويُؤكَّد الموعد بعد رد الاستقبال.</p>
   </header>
 
   <section aria-labelledby="h-services">
@@ -288,7 +288,6 @@
       track('phone_call_click', {link_location:where, contact_method:'phone'});
     } else if(kind === 'whatsapp'){
       track('whatsapp_click', {link_location:where});
-      track('phone_call_click', {link_location:where, contact_method:'whatsapp'});
     } else if(kind === 'directions'){
       track('directions_click', {link_location:where});
     }
@@ -327,15 +326,21 @@
   // ---- التاريخ والوقت (المركز يعمل 24 ساعة)
   var dateIn = document.getElementById('date'), timeSel = document.getElementById('time');
   function pad(n){ return (n<10?'0':'') + n; }
-  function ymd(d){ return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
-  var today = new Date();
-  dateIn.min = ymd(today);
-  var max = new Date(); max.setDate(max.getDate()+30); dateIn.max = ymd(max);
-  dateIn.value = ymd(today);
+  // مواعيد الحجز حسب توقيت جدة، وليس توقيت هاتف الزائر أو جهازه.
+  function ksaClock(d){
+    var parts = {};
+    new Intl.DateTimeFormat('en-US', {timeZone:'Asia/Riyadh', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', hourCycle:'h23'}).formatToParts(d).forEach(function(p){ parts[p.type] = p.value; });
+    return {date: parts.year + '-' + parts.month + '-' + parts.day, hour:+parts.hour, minute:+parts.minute};
+  }
+  var nowKsa = ksaClock(new Date());
+  dateIn.min = nowKsa.date;
+  dateIn.max = ksaClock(new Date(Date.now() + 30*24*60*60*1000)).date;
+  dateIn.value = nowKsa.date;
   function label12(h, m){ var ap = h < 12 ? 'ص' : 'م'; var hh = h % 12 || 12; return hh + ':' + pad(m) + ' ' + ap; }
   function fillTimes(){
-    var isToday = dateIn.value === ymd(new Date());
-    var now = new Date(), minMins = isToday ? now.getHours()*60 + now.getMinutes() + 30 : 0;
+    var current = ksaClock(new Date());
+    var isToday = dateIn.value === current.date;
+    var minMins = isToday ? current.hour*60 + current.minute + 30 : 0;
     var html = '<option value="">اختر الوقت</option>';
     if(isToday) html += '<option value="asap">أقرب وقت متاح</option>';
     for(var m = 0; m < 24*60; m += 30){
@@ -450,14 +455,9 @@
     try{ if(sessionStorage.getItem(key)) return; sessionStorage.setItem(key, '1'); }catch(e){ if(window.__rhFired && window.__rhFired[finalRef]) return; }
     window.__rhFired = window.__rhFired || {}; window.__rhFired[finalRef] = true;
     var params = {booking_ref:finalRef, service:f.service, service_price:s.price, value:0, currency:'SAR'};
-    // التحويلات المحسّنة: الجوال مُجزّأ SHA-256 في المتصفح، ولا يُرسل خامًا. يُقرأ من وسم Google Ads فقط، لا من وسوم GA4.
-    if(window.crypto && crypto.subtle && window.TextEncoder){
-      crypto.subtle.digest('SHA-256', new TextEncoder().encode(f.phone)).then(function(buf){
-        var hex = Array.prototype.map.call(new Uint8Array(buf), function(x){ return ('0' + x.toString(16)).slice(-2); }).join('');
-        dataLayer.push({ ads_user_data: { sha256_phone_number: hex } });
-        track('booking_saved', params);
-      }, function(){ track('booking_saved', params); });
-    } else { track('booking_saved', params); }
+    // لا نضع رقم الجوال أو تجزئته في dataLayer المشترك؛ ذلك لا يضمن اقتصار الوصول على Google Ads.
+    // يمكن إعداد التحويلات المحسّنة لاحقًا بصورة منفصلة بعد توثيق الموافقة وإعدادات GTM.
+    track('booking_saved', params);
   }
 })();
 </script>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.supabase.co; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+<!-- يُملأ عند النشر: عنوان مشروع Supabase الخاص براحتك ومفتاحه العام (anon). المفتاح العام آمن للنشر لأن الحماية في RLS. -->
+<meta name="supabase-url" content="https://satsrgkyppenlsdgrsev.supabase.co">
+<meta name="supabase-anon-key" content="sb_publishable_W8BcC5_LNyS7qkd3KfUZ8Q_eijKepi1">
+<title>استقبال راحتك</title>
+<style>
+  :root{--bg:#faf5eb;--surface:#fff;--fg:#211a12;--muted:#6c5d44;--line:#e6dccb;--gold:#a9772e;--ok:#2b645b;--bad:#a84b28;--chip:#f1e8d8}
+  @media (prefers-color-scheme: dark){:root{--bg:#110d0a;--surface:#1b1511;--fg:#f8efe1;--muted:#b3a38b;--line:#33291f;--gold:#d8aa5c;--ok:#5fb3a6;--bad:#e08a66;--chip:#2a2018}}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,"Segoe UI",Tahoma,sans-serif;padding:16px}
+  h1{font-size:1.3rem;margin:0 0 12px} .wrap{max-width:980px;margin:0 auto}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+  label{display:block;margin:8px 0 4px;color:var(--muted)} input{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);font:inherit}
+  button{font:inherit;border:1px solid var(--line);background:var(--chip);color:var(--fg);border-radius:8px;padding:8px 12px;cursor:pointer;min-height:40px}
+  button.primary{background:var(--gold);color:#fff;border-color:var(--gold)} button.good{border-color:var(--ok);color:var(--ok)} button.warn{border-color:var(--bad);color:var(--bad)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center} .grow{flex:1}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:12px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px} .stat b{display:block;font-size:1.4rem}
+  .tabs button[aria-pressed="true"]{background:var(--gold);color:#fff;border-color:var(--gold)}
+  .req{display:grid;gap:6px} .ref{font-weight:700;direction:ltr;unicode-bidi:embed} .muted{color:var(--muted);font-size:.9rem}
+  .badge{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--chip);font-size:.85rem}
+  .err{color:var(--bad);min-height:1.2em} a.tel{color:var(--gold);font-weight:700;direction:ltr;unicode-bidi:embed;text-decoration:none}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>لوحة استقبال مركز راحتك</h1>
+
+  <form id="login" class="card" autocomplete="on">
+    <label for="email">البريد</label><input id="email" type="email" required autocomplete="username">
+    <label for="password">كلمة المرور</label><input id="password" type="password" required autocomplete="current-password">
+    <p class="err" id="loginErr"></p>
+    <button class="primary" type="submit">دخول</button>
+  </form>
+
+  <section id="app" hidden>
+    <div class="row" style="margin-bottom:10px">
+      <span class="muted grow" id="who"></span>
+      <button id="refresh" type="button">تحديث</button>
+      <button id="logout" type="button">خروج</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="muted">جديدة</span><b id="sNew">0</b></div>
+      <div class="stat"><span class="muted">مؤكدة</span><b id="sConf">0</b></div>
+      <div class="stat"><span class="muted">حضر ودفع اليوم</span><b id="sPaid">0</b></div>
+      <div class="stat"><span class="muted">مدفوع اليوم (ريال)</span><b id="sRev">0</b></div>
+    </div>
+    <div class="row tabs" role="group" aria-label="تصفية حسب الحالة" style="margin-bottom:10px">
+      <button type="button" data-f="new" aria-pressed="true">جديدة</button>
+      <button type="button" data-f="contacted" aria-pressed="false">تم التواصل</button>
+      <button type="button" data-f="confirmed" aria-pressed="false">مؤكدة</button>
+      <button type="button" data-f="attended_paid" aria-pressed="false">حضر ودفع</button>
+      <button type="button" data-f="" aria-pressed="false">الكل</button>
+    </div>
+    <p class="err" id="appErr"></p>
+    <div id="list"></div>
+  </section>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

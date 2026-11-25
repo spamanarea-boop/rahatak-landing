@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>احجز موعدك | مركز راحتك - جدة الصفا</title>
+<meta name="description" content="احجز جلسة مساج رجالي أو حمام مغربي في مركز راحتك بحي الصفا، جدة. مساج 45 دقيقة 140 ريال، حمام مغربي 150 ريال، العرض الذهبي 265 ريال.">
+<meta name="robots" content="noindex">
+<!-- دالة حفظ الحجوزات (مشروع Supabase المستقل لمركز راحتك) -->
+<meta name="booking-endpoint" content="https://satsrgkyppenlsdgrsev.supabase.co/functions/v1/rahatak-book">
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-PPXKGH87"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#110d0a; --surface:#1b1511; --surface-2:#241c15;
+    --fg:#f8efe1; --muted:#b3a38b; --gold:#d8aa5c; --gold-soft:#8c6c38;
+    --teal:#3d8077; --danger:#e0775a; --border:rgba(248,239,225,.14);
+    --wa:#1f9d55;
+    color-scheme:dark;
+    --font-display:'Aref Ruqaa','Traditional Arabic',serif;
+    --font-body:'Tajawal','Segoe UI',sans-serif;
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#faf5eb; --surface:#ffffff; --surface-2:#f2e6d2;
+      --fg:#211a12; --muted:#6c5d44; --gold:#a9772e; --gold-soft:#e6c892;
+      --teal:#2b645b; --danger:#b4462b; --border:rgba(33,26,18,.14);
+      color-scheme:light;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#faf5eb; --surface:#ffffff; --surface-2:#f2e6d2;
+    --fg:#211a12; --muted:#6c5d44; --gold:#a9772e; --gold-soft:#e6c892;
+    --teal:#2b645b; --danger:#b4462b; --border:rgba(33,26,18,.14);
+    color-scheme:light;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg); color:var(--fg); font-family:var(--font-body); padding:0 16px 96px}
+  .wrap{max-width:720px; margin:0 auto}
+  h1,h2{font-family:var(--font-display); margin:0; line-height:1.25; text-wrap:balance}
+  p{margin:0; line-height:1.75}
+  a{color:inherit}
+
+  .top{position:sticky; top:0; z-index:10; display:flex; align-items:center; justify-content:space-between; gap:12px;
+       padding:14px 0; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(12px); border-bottom:1px solid var(--border)}
+  .brand{font-family:var(--font-display); font-size:1.2rem; font-weight:700; white-space:nowrap}
+  .brand small{display:block; font-family:var(--font-body); font-size:.75rem; font-weight:500; color:var(--muted)}
+
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 20px; border-radius:12px;
+       font:700 .95rem var(--font-body); text-decoration:none; border:1px solid transparent; cursor:pointer}
+  .btn:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+  .btn.primary{background:linear-gradient(135deg, var(--gold), var(--gold-soft)); color:#1a1309}
+  .btn.wa{background:var(--wa); color:#fff}
+  .btn.ghost{border-color:var(--border); color:var(--fg); background:transparent}
+  .btn.sm{padding:9px 14px; font-size:.85rem; border-radius:999px}
+
+  header.intro{padding:36px 0 8px}
+  .eyebrow{color:var(--gold); font-weight:700; font-size:.82rem}
+  header.intro h1{font-size:clamp(1.9rem,7vw,2.6rem); margin-top:8px}
+  header.intro p{color:var(--muted); margin-top:10px}
+
+  section{padding:26px 0}
+  section > h2{font-size:1.4rem; margin-bottom:14px}
+
+  /* الأسعار */
+  .prices{display:grid; gap:12px}
+  .price{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px;
+         background:var(--surface); border:1px solid var(--border); border-radius:16px; cursor:pointer; text-align:right;
+         font-family:var(--font-body); color:var(--fg); width:100%}
+  .price[aria-pressed="true"]{border-color:var(--gold); box-shadow:0 0 0 1px var(--gold) inset}
+  .price .name{font-weight:700; font-size:1.02rem}
+  .price .desc{display:block; color:var(--muted); font-size:.85rem; margin-top:2px; font-weight:400}
+  .price .amt{font-weight:900; font-size:1.35rem; color:var(--gold); white-space:nowrap; font-variant-numeric:tabular-nums}
+  .price .amt span{font-size:.8rem; font-weight:500; color:var(--muted)}
+  .tag{display:inline-block; margin-inline-start:6px; padding:2px 8px; border-radius:999px; font-size:.7rem; font-weight:700;
+       background:color-mix(in srgb, var(--gold) 22%, transparent); color:var(--gold)}
+
+  /* النموذج */
+  form{background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:20px; display:grid; gap:14px}
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+  @media (max-width:520px){.row{grid-template-columns:1fr}}
+  label{display:grid; gap:6px; font-weight:700; font-size:.9rem}
+  label .hint{font-weight:400; color:var(--muted); font-size:.78rem}
+  input, select, textarea{width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--border);
+       background:var(--bg); color:var(--fg); font:500 1rem var(--font-body)}
+  input[type="tel"]{direction:ltr; text-align:right}
+  textarea{min-height:70px; resize:vertical}
+  .err{color:var(--danger); font-size:.8rem; font-weight:500; min-height:1em}
+  .consent{display:flex; gap:10px; align-items:flex-start; font-weight:500; font-size:.85rem; color:var(--muted)}
+  .consent input{width:auto; margin-top:4px}
+  .note{font-size:.82rem; color:var(--muted); background:var(--surface-2); border-radius:12px; padding:10px 12px}
+  form .btn{width:100%; font-size:1.02rem; padding:15px}
+
+  .done{display:none; background:var(--surface); border:1px solid var(--gold); border-radius:20px; padding:22px; gap:12px}
+  .done.show{display:grid}
+  .done .ref{font-variant-numeric:tabular-nums; font-weight:900; color:var(--gold); direction:ltr; text-align:right}
+  .done .actions{display:flex; flex-wrap:wrap; gap:10px}
+
+  /* التواصل والموقع */
+  .contact{display:grid; gap:12px; background:var(--surface-2); border:1px solid var(--border); border-radius:20px; padding:20px}
+  .contact .num{font-weight:900; font-size:1.2rem; direction:ltr; text-align:right; font-variant-numeric:tabular-nums}
+  .contact .actions{display:flex; flex-wrap:wrap; gap:10px}
+  .photos{display:grid; place-items:center; text-align:center; min-height:120px; border:1.5px dashed var(--border);
+          border-radius:16px; color:var(--muted); font-size:.9rem; padding:18px}
+
+  .sticky{position:fixed; inset:auto 0 0 0; z-index:20; display:flex; gap:10px; padding:12px 16px;
+          background:color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter:blur(14px); border-top:1px solid var(--border)}
+  .sticky .btn{flex:1}
+  footer{color:var(--muted); font-size:.8rem; text-align:center; padding:24px 0}
+</style>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PPXKGH87" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<div class="top wrap">
+  <div class="brand">مركز راحتك<small>مساج رجالي · حي الصفا، جدة</small></div>
+  <a class="btn primary sm" href="tel:0122682692" data-track="call" data-where="top_bar">📞 اتصل</a>
+</div>
+
+<main class="wrap">
+  <header class="intro">
+    <span class="eyebrow">حجز موعد · للرجال فقط</span>
+    <h1 id="heroTitle">احجز جلستك في أقل من دقيقة</h1>
+    <p id="heroLead" hidden></p>
+    <p>اختر الخدمة والوقت المناسب، وسيصل طلبك إلى استقبال المركز عبر واتساب. <b>يتأكد الحجز بعد رد الاستقبال.</b></p>
+  </header>
+
+  <section aria-labelledby="h-services">
+    <h2 id="h-services">الخدمات والأسعار</h2>
+    <div class="prices" role="group" aria-label="اختر الخدمة">
+      <button type="button" class="price" data-service="silver" aria-pressed="false">
+        <span><span class="name">العرض الفضي — جلسة مساج</span><span class="desc">45 دقيقة · مقدمو خدمة رجال فلبينيون</span></span>
+        <span class="amt">140 <span>ريال</span></span>
+      </button>
+      <button type="button" class="price" data-service="gold" aria-pressed="false">
+        <span><span class="name">العرض الذهبي<span class="tag">وفّر 25</span></span><span class="desc">مساج 45 دقيقة + حمام مغربي · بدل 290 ريال</span></span>
+        <span class="amt">265 <span>ريال</span></span>
+      </button>
+      <button type="button" class="price" data-service="hammam" aria-pressed="false">
+        <span><span class="name">حمام مغربي</span><span class="desc">خدمة منفصلة عن المساج</span></span>
+        <span class="amt">150 <span>ريال</span></span>
+      </button>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-form" id="book">
+    <h2 id="h-form">طلب الحجز</h2>
+    <form id="bookingForm" novalidate>
+      <label>الخدمة
+        <select name="service" id="service" required>
+          <option value="">اختر الخدمة</option>
+          <option value="silver">العرض الفضي — مساج 45 دقيقة (140 ريال)</option>
+          <option value="gold">العرض الذهبي — مساج + حمام مغربي (265 ريال)</option>
+          <option value="hammam">حمام مغربي (150 ريال)</option>
+        </select>
+        <span class="err" data-for="service"></span>
+      </label>
+      <div class="row">
+        <label>الاسم
+          <input name="name" id="name" autocomplete="given-name" maxlength="40" required>
+          <span class="err" data-for="name"></span>
+        </label>
+        <label>رقم الجوال <span class="hint">مثال: 05xxxxxxxx</span>
+          <input name="phone" id="phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="14" required>
+          <span class="err" data-for="phone"></span>
+        </label>
+      </div>
+      <div class="row">
+        <label>التاريخ
+          <input name="date" id="date" type="date" required>
+          <span class="err" data-for="date"></span>
+        </label>
+        <label>الوقت المفضّل
+          <select name="time" id="time" required></select>
+          <span class="err" data-for="time"></span>
+        </label>
+      </div>
+      <label>ملاحظات <span class="hint">اختياري</span>
+        <textarea name="notes" id="notes" maxlength="200"></textarea>
+      </label>
+      <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+      <label class="consent"><input type="checkbox" id="consent" required>
+        <span>أوافق على تواصل مركز راحتك معي على هذا الرقم بخصوص الحجز فقط.</span>
+      </label>
+      <span class="err" data-for="consent"></span>
+      <p class="note">يُحفظ طلبك لدى المركز فور الإرسال، ويتواصل معك الاستقبال لتأكيد الموعد. <b>الحجز لا يُعد مؤكدًا قبل رد الاستقبال.</b></p>
+      <button class="btn wa" type="submit" id="submitBtn">إرسال طلب الحجز</button>
+    </form>
+
+    <div class="done" id="done" role="status" aria-live="polite">
+      <h2 id="doneTitle">تم استلام طلبك</h2>
+      <p>رقم الطلب: <span class="ref" id="refOut"></span></p>
+      <p id="doneText">طلبك محفوظ لدى المركز، وسيتواصل معك الاستقبال لتأكيد الموعد. لتسريع التأكيد يمكنك إرسال الطلب عبر واتساب أيضًا.</p>
+      <div class="actions">
+        <a class="btn wa" id="waAgain" href="#" target="_blank" rel="noopener" data-track="whatsapp" data-where="confirmation">إرسال الطلب عبر واتساب</a>
+        <a class="btn ghost" href="tel:0122682692" data-track="call" data-where="confirmation">أو اتصل بنا</a>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-photos">
+    <h2 id="h-photos">صور المركز</h2>
+    <!-- تُضاف هنا صور حقيقية للمركز فقط (الواجهة، الاستقبال، غرف المساج، الحمام). لا تُستخدم صور مولّدة. -->
+    <div class="photos">صور المركز الحقيقية تُضاف قريبًا</div>
+  </section>
+
+  <section aria-labelledby="h-contact">
+    <h2 id="h-contact">الموقع والتواصل</h2>
+    <div class="contact">
+      <p>حي الصفا، جدة — المملكة العربية السعودية</p>
+      <span class="num">012 268 2692</span>
+      <div class="actions">
+        <a class="btn primary" href="tel:0122682692" data-track="call" data-where="contact">اتصل الآن</a>
+        <a class="btn wa" href="#" data-wa-generic data-track="whatsapp" data-where="contact" target="_blank" rel="noopener">واتساب</a>
+        <a class="btn ghost" href="https://maps.app.goo.gl/YBe5SqUoDdFgDKig9?g_st=ic" target="_blank" rel="noopener" data-track="directions" data-where="contact">الاتجاهات في خرائط Google</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">مركز راحتك · مساج رجالي · حي الصفا، جدة</footer>
+
+<div class="sticky">
+  <a class="btn primary" href="#book" data-track="book_jump" data-where="sticky_bar">احجز موعدك</a>
+  <a class="btn ghost" href="tel:0122682692" data-track="call" data-where="sticky_bar">📞 اتصل</a>
+</div>
+
+<script>
+(function(){
+  var WA = '966122682692';
+  // عنوان دالة حفظ الحجوزات (Supabase Edge Function). فارغ = الحفظ غير مفعّل بعد، فيُعرض واتساب كبديل.
+  var BOOKING_ENDPOINT = (document.querySelector('meta[name="booking-endpoint"]') || {}).content || '';
+  if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)){
+    var ep = new URLSearchParams(location.search).get('endpoint'); if(ep) BOOKING_ENDPOINT = ep; // للاختبار المحلي فقط
+  }
+  var SERVICES = {
+    silver: {label:'العرض الفضي — مساج 45 دقيقة', price:140},
+    gold:   {label:'العرض الذهبي — مساج 45 دقيقة + حمام مغربي', price:265},
+    hammam: {label:'حمام مغربي', price:150}
+  };
+
+  // ---- مصدر الزيارة: نحفظ معرّف نقرة الإعلان (gclid/gbraid/wbraid) لربط الطلب بالإعلان
+  function store(k, v){ try{ localStorage.setItem(k, v); }catch(e){} }
+  function read(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  var qs = new URLSearchParams(location.search);
+  var clickId = qs.get('gclid') || qs.get('gbraid') || qs.get('wbraid');
+  if(clickId){ store('rh_click', JSON.stringify({id:clickId, type: qs.get('gclid') ? 'gclid' : (qs.get('gbraid') ? 'gbraid' : 'wbraid'), t:Date.now()})); }
+  var src = (function(){
+    var saved = null; try{ saved = JSON.parse(read('rh_click') || 'null'); }catch(e){}
+    var fresh = saved && (Date.now() - saved.t) < 90*24*3600*1000;
+    if(fresh) return 'google_ads';
+    var u = (qs.get('utm_source') || '').toLowerCase();
+    if(u) return u;
+    if(/google\./.test(document.referrer)) return 'google_organic';
+    return 'direct';
+  })();
+  var SRC_AR = {google_ads:'إعلان جوجل', google_organic:'بحث جوجل', direct:'مباشر', gbp:'خرائط جوجل', snapchat:'سناب شات'};
+
+  function track(name, params){
+    params = params || {};
+    params.traffic_source = src;
+    var m = new URLSearchParams(location.search).get('m'); if(m) params.ad_message = m;
+    dataLayer.push(Object.assign({event:name}, params));
+  }
+
+  // ---- روابط واتساب العامة
+  var genericMsg = 'مرحبًا، أريد حجز موعد في مركز راحتك' + (src==='google_ads' ? ' (من إعلان جوجل)' : '');
+  document.querySelectorAll('[data-wa-generic]').forEach(function(a){
+    a.href = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(genericMsg);
+  });
+
+  // ---- تتبع النقرات: اتصال / واتساب / اتجاهات
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('[data-track]');
+    if(!a) return;
+    var kind = a.getAttribute('data-track'), where = a.getAttribute('data-where') || 'other';
+    if(kind === 'call'){
+      track('call_click', {link_location:where});
+      // يبقي التحويل الحالي «اتصال من الموقع» يعمل كما هو
+      track('phone_call_click', {link_location:where, contact_method:'phone'});
+    } else if(kind === 'whatsapp'){
+      track('whatsapp_click', {link_location:where});
+      track('phone_call_click', {link_location:where, contact_method:'whatsapp'});
+    } else if(kind === 'directions'){
+      track('directions_click', {link_location:where});
+    }
+  });
+
+  // ---- اختيار الخدمة من بطاقات الأسعار
+  var serviceSel = document.getElementById('service');
+  var cards = document.querySelectorAll('.price');
+  function syncCards(){ cards.forEach(function(c){ c.setAttribute('aria-pressed', c.dataset.service === serviceSel.value ? 'true' : 'false'); }); }
+  cards.forEach(function(c){
+    c.addEventListener('click', function(){
+      serviceSel.value = c.dataset.service; syncCards();
+      track('service_select', {service:c.dataset.service});
+      document.getElementById('book').scrollIntoView({behavior:'smooth'});
+    });
+  });
+  serviceSel.addEventListener('change', syncCards);
+  var preset = qs.get('service'); if(preset && SERVICES[preset]){ serviceSel.value = preset; syncCards(); }
+
+  // ---- مطابقة الصفحة مع رسالة الإعلان (?m=...) — نفس الوعد الذي قرأه العميل في الإعلان
+  var HEROES = {
+    tired:   {t:'تعبت من الدوام؟ جلسة مساج 45 دقيقة بـ140 ريال', l:'مساج رجالي في حي الصفا، مقدمو الخدمة رجال فلبينيون.', s:'silver'},
+    value:   {t:'العرض الذهبي: مساج + حمام مغربي بـ265 ريال', l:'بدل 290 ريال — توفّر 25 ريال في زيارة واحدة.', s:'gold'},
+    hammam:  {t:'حمام مغربي رجالي في الصفا بـ150 ريال', l:'خدمة منفصلة عن المساج، ويمكن جمعها مع المساج في العرض الذهبي.', s:'hammam'},
+    night:   {t:'مفتوحون 24 ساعة — احجز حتى بعد منتصف الليل', l:'إذا لم نرد فورًا، أرسل طلبك وسيتواصل معك الاستقبال لتأكيد الموعد.', s:'silver'},
+    privacy: {t:'مساج رجالي بخصوصية — للرجال فقط', l:'مقدمو الخدمة رجال فلبينيون، والمركز مخصص للرجال فقط.', s:'silver'},
+    near:    {t:'مساج رجالي قريب منك في حي الصفا', l:'اضغط «الاتجاهات» للوصول، أو احجز موعدك الآن.', s:'silver'}
+  };
+  var adMsg = qs.get('m'); var hero = adMsg && HEROES[adMsg];
+  if(hero){
+    document.getElementById('heroTitle').textContent = hero.t;
+    var lead = document.getElementById('heroLead'); lead.textContent = hero.l; lead.hidden = false;
+    if(!preset && SERVICES[hero.s]){ serviceSel.value = hero.s; syncCards(); }
+  }
+
+  // ---- التاريخ والوقت (المركز يعمل 24 ساعة)
+  var dateIn = document.getElementById('date'), timeSel = document.getElementById('time');
+  function pad(n){ return (n<10?'0':'') + n; }
+  function ymd(d){ return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+  var today = new Date();
+  dateIn.min = ymd(today);
+  var max = new Date(); max.setDate(max.getDate()+30); dateIn.max = ymd(max);
+  dateIn.value = ymd(today);
+  function label12(h, m){ var ap = h < 12 ? 'ص' : 'م'; var hh = h % 12 || 12; return hh + ':' + pad(m) + ' ' + ap; }
+  function fillTimes(){
+    var isToday = dateIn.value === ymd(new Date());
+    var now = new Date(), minMins = isToday ? now.getHours()*60 + now.getMinutes() + 30 : 0;
+    var html = '<option value="">اختر الوقت</option>';
+    if(isToday) html += '<option value="asap">أقرب وقت متاح</option>';
+    for(var m = 0; m < 24*60; m += 30){
+      if(m < minMins) continue;
+      var h = Math.floor(m/60), mi = m % 60;
+      html += '<option value="' + pad(h) + ':' + pad(mi) + '">' + label12(h, mi) + '</option>';
+    }
+    timeSel.innerHTML = html;
+  }
+  dateIn.addEventListener('change', fillTimes); fillTimes();
+
+  // ---- إرسال الطلب
+  var form = document.getElementById('bookingForm'), started = false;
+  form.addEventListener('input', function(){ if(!started){ started = true; track('booking_form_start'); } });
+
+  function normPhone(v){
+    var d = (v || '').replace(/[^\d]/g, '').replace(/^00/, '');
+    if(/^05\d{8}$/.test(d)) return '+966' + d.slice(1);
+    if(/^9665\d{8}$/.test(d)) return '+' + d;
+    if(/^5\d{8}$/.test(d)) return '+966' + d;
+    return null;
+  }
+  function setErr(k, msg){ var el = form.querySelector('.err[data-for="' + k + '"]'); if(el) el.textContent = msg || ''; }
+
+  var submitting = false;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(submitting) return;   // منع الإرسال المزدوج (نقرتان سريعتان)
+    var f = {
+      service: serviceSel.value,
+      name: document.getElementById('name').value.trim(),
+      phone: normPhone(document.getElementById('phone').value),
+      date: dateIn.value, time: timeSel.value,
+      notes: document.getElementById('notes').value.trim(),
+      consent: document.getElementById('consent').checked
+    };
+    var ok = true;
+    ['service','name','phone','date','time','consent'].forEach(function(k){ setErr(k, ''); });
+    if(!f.service){ setErr('service', 'اختر الخدمة'); ok = false; }
+    if(f.name.length < 2){ setErr('name', 'اكتب اسمك'); ok = false; }
+    if(!f.phone){ setErr('phone', 'اكتب رقم جوال سعودي صحيح يبدأ بـ 05'); ok = false; }
+    if(!f.date){ setErr('date', 'اختر التاريخ'); ok = false; }
+    if(!f.time){ setErr('time', 'اختر الوقت'); ok = false; }
+    if(!f.consent){ setErr('consent', 'الموافقة مطلوبة لنتواصل معك بخصوص الحجز'); ok = false; }
+    if(!ok){ track('booking_form_error'); return; }
+
+    var s = SERVICES[f.service];
+    // رقم طلب العميل: يبقى نفسه عند إعادة المحاولة، فلا يُنشأ طلب مكرر
+    var ref = pendingRef || (pendingRef = newRef());
+    var when = f.time === 'asap' ? 'أقرب وقت متاح اليوم' : f.date + ' الساعة ' + label12(+f.time.slice(0,2), +f.time.slice(3));
+
+    // رسالة واتساب بلا اسم ولا رقم جوال ولا ملاحظات: الرابط قد يُسجَّل كنقرة خارجية في GA4
+    function waUrl(r){
+      var msg = 'طلب حجز — مركز راحتك\n' + 'رقم الطلب: ' + r + '\n' +
+                'الخدمة: ' + s.label + ' (' + s.price + ' ريال)\n' + 'الموعد المطلوب: ' + when;
+      return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
+    }
+
+    submitting = true;
+    track('booking_submit', {service:f.service});
+    var btn = document.getElementById('submitBtn'); btn.disabled = true; btn.textContent = 'جارٍ الإرسال…';
+
+    function finish(saved, serverRef){
+      var finalRef = serverRef || ref;
+      document.getElementById('refOut').textContent = finalRef;
+      document.getElementById('waAgain').href = waUrl(finalRef);
+      if(saved){ fireSavedOnce(finalRef, f, s); }
+      else {
+        track('booking_save_failed', {service:f.service});
+        document.getElementById('doneTitle').textContent = 'لم يُحفظ طلبك بعد';
+        document.getElementById('doneText').textContent = 'تعذّر حفظ الطلب تلقائيًا. اضغط الزر أدناه لإرسال الطلب عبر واتساب واذكر اسمك، أو اتصل بنا مباشرة.';
+      }
+      form.style.display = 'none';
+      document.getElementById('done').classList.add('show');
+    }
+
+    if(!BOOKING_ENDPOINT){ finish(false); return; }
+    var ck = savedClick();
+    var ctrl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = setTimeout(function(){ if(ctrl) ctrl.abort(); }, 10000);
+    fetch(BOOKING_ENDPOINT, {
+      method:'POST', headers:{'Content-Type':'application/json'}, signal: ctrl ? ctrl.signal : undefined,
+      body: JSON.stringify({
+        client_ref: ref, service: f.service, name: f.name, phone: f.phone,
+        requested_date: f.date, requested_time: f.time, notes: f.notes, consent: f.consent,
+        source: src, ad_message: adMsg || null,
+        gclid: ck && ck.type === 'gclid' ? ck.id : null, gbraid: ck && ck.type === 'gbraid' ? ck.id : null,
+        wbraid: ck && ck.type === 'wbraid' ? ck.id : null,
+        utm_source: qs.get('utm_source'), utm_campaign: qs.get('utm_campaign'),
+        website: document.getElementById('website').value   // حقل خفي ضد الرسائل الآلية
+      })
+    }).then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function(j){ clearTimeout(timer); finish(!!(j && j.saved), j && j.ref); })
+      .catch(function(){ clearTimeout(timer); finish(false); });
+  });
+
+  var pendingRef = null;
+  function newRef(){
+    var d = new Date(), A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', b = new Uint8Array(6), out = '';
+    (window.crypto || window.msCrypto).getRandomValues(b);
+    for(var i = 0; i < b.length; i++) out += A[b[i] % 32];
+    return 'R' + String(d.getFullYear()).slice(2) + pad(d.getMonth()+1) + pad(d.getDate()) + '-' + out;
+  }
+  function savedClick(){
+    try{ var c = JSON.parse(read('rh_click') || 'null');
+      return c && c.id && (Date.now() - c.t) < 90*24*3600*1000 ? c : null; }catch(e){ return null; }
+  }
+
+  // booking_saved يُطلق مرة واحدة فقط لكل رقم طلب (حتى لو أعيد الإرسال أو حُدّثت الصفحة)
+  function fireSavedOnce(finalRef, f, s){
+    var key = 'rh_saved_' + finalRef;
+    try{ if(sessionStorage.getItem(key)) return; sessionStorage.setItem(key, '1'); }catch(e){ if(window.__rhFired && window.__rhFired[finalRef]) return; }
+    window.__rhFired = window.__rhFired || {}; window.__rhFired[finalRef] = true;
+    var params = {booking_ref:finalRef, service:f.service, service_price:s.price, value:0, currency:'SAR'};
+    // التحويلات المحسّنة: الجوال مُجزّأ SHA-256 في المتصفح، ولا يُرسل خامًا. يُقرأ من وسم Google Ads فقط، لا من وسوم GA4.
+    if(window.crypto && crypto.subtle && window.TextEncoder){
+      crypto.subtle.digest('SHA-256', new TextEncoder().encode(f.phone)).then(function(buf){
+        var hex = Array.prototype.map.call(new Uint8Array(buf), function(x){ return ('0' + x.toString(16)).slice(-2); }).join('');
+        dataLayer.push({ ads_user_data: { sha256_phone_number: hex } });
+        track('booking_saved', params);
+      }, function(){ track('booking_saved', params); });
+    } else { track('booking_saved', params); }
+  }
+})();
+</script>
+</body>
+</html>

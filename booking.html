@@ -388,8 +388,8 @@
       if(saved){ fireSavedOnce(finalRef, f, s); }
       else {
         track('booking_save_failed', {service:f.service});
-        document.getElementById('doneTitle').textContent = 'لم يُحفظ طلبك بعد';
-        document.getElementById('doneText').textContent = 'تعذّر حفظ الطلب تلقائيًا. اتصل بالمركز مباشرة لإتمام الحجز؛ فهذا الطلب لم يصل إلى الاستقبال.';
+        document.getElementById('doneTitle').textContent = 'لم نتمكن من تأكيد وصول طلبك';
+        document.getElementById('doneText').textContent = 'لم نستطع التحقق من وصول الطلب بسبب مشكلة اتصال. اتصل بالمركز على 0122682692 للتأكد قبل محاولة إعادة الإرسال، حتى لا يتكرر الطلب.';
       }
       form.style.display = 'none';
       document.getElementById('done').classList.add('show');
